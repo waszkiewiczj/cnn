@@ -3,6 +3,10 @@ import torch.nn.functional as F
 
 
 class TestNet(nn.Module):
+    """
+    Network taken from PyTorch repository tutorials.
+    See ref: https://github.com/pytorch/tutorials/blob/master/beginner_source/blitz/cifar10_tutorial.py
+    """
     def __init__(self):
         super(TestNet, self).__init__()
         self.conv1 = nn.Conv2d(3, 6, 5)
