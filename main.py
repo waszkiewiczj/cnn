@@ -2,6 +2,8 @@ from torch import nn
 
 import observers
 import train
+import test
+import kaggle
 from datasets import load_CIFAR10
 from networks import TestNet
 
@@ -22,7 +24,11 @@ def main():
 
     train.train_network(network=net, config=train_config, observer=observer)
 
-    print('accuracy:', train.get_accuracy(net, testset))
+    predicted = test.predict(net, testset)
+    accuracy = test.get_accuracy(predicted, testset.targets)
+    print('accuracy: %.2f' % accuracy)
+    submission_df = kaggle.create_submission_df(testset, predicted)
+    submission_df.to_csv('kaggle_submissions/first-try-sub.csv', index=False)
 
 
 if __name__ == '__main__':
