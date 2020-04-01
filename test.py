@@ -4,11 +4,15 @@ import numpy as np
 
 
 def predict(network, testset):
-    testset_loader = torch.utils.data.DataLoader(testset, batch_size=len(testset), shuffle=False)
-    inputs, *others = next(iter(testset_loader))
-    outputs = network(inputs)
-    _, predicted = torch.max(outputs, 1)
-    return predicted.numpy()
+    result_predicted = []
+    testset_loader = torch.utils.data.DataLoader(testset, batch_size=50, shuffle=False)
+    with torch.no_grad():
+        for data in testset_loader:
+            inputs, *others = data
+            outputs = network(inputs)
+            _, predicted = torch.max(outputs, 1)
+            result_predicted += predicted.tolist()
+    return np.array(result_predicted)
 
 
 def get_accuracy(predicted, targets):
