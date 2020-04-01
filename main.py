@@ -4,6 +4,7 @@ import train
 import test
 import datasets.cifar10
 import networks
+import kaggle
 
 
 def main():
@@ -22,9 +23,10 @@ def main():
 
     train.train_network(network=net, config=train_config, observer=observer)
 
-    predicted = test.predict(net, trainset)
-    accuracy = test.get_accuracy(predicted, trainset.targets)
-    print('accuracy: %.2f' % accuracy)
+    predicted = test.predict(network=net, testset=testset)
+    idx_to_class = kaggle.get_idx_to_class_dict(trainset)
+    df = kaggle.create_submission_df(predicted=predicted, idx_to_class=idx_to_class)
+    df.to_csv('./kaggle_submissions/first-try-sub.csv', index=False)
 
 
 if __name__ == '__main__':
