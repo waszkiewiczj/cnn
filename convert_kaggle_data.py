@@ -41,7 +41,7 @@ for row in labels_df.values:
 for file in os.listdir(f'{input_dir}test/'):
     id = os.path.splitext(file)[0]
     old_path = f'{input_dir}test/{file}'
-    new_path = f'{test_class_dir}{id.zfill(7)}'
+    new_path = f'{test_class_dir}{id.zfill(7)}.png'
     if os.path.isfile(old_path):
         shutil.copy(old_path, new_path)
         print(f'Image copied from {old_path} to {new_path}')
