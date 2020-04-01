@@ -1,9 +1,9 @@
 from torch import nn
 
 import observers
+import train
 from datasets import load_CIFAR10
 from networks import TestNet
-from train import TrainConfig, train_network
 
 
 def main():
@@ -17,10 +17,12 @@ def main():
     observer = observers.DummyPrintObserver()
     net = TestNet()
 
-    train_config = TrainConfig(trainset=trainset, batch_size=batch_size, epochs=epochs, lr=lr, momentum=momentum,
+    train_config = train.TrainConfig(trainset=trainset, batch_size=batch_size, epochs=epochs, lr=lr, momentum=momentum,
                                criterion=criterion, seed=seed)
 
-    train_network(network=net, config=train_config, observer=observer)
+    train.train_network(network=net, config=train_config, observer=observer)
+
+    print('accuracy:', train.get_accuracy(net, testset))
 
 
 if __name__ == '__main__':
