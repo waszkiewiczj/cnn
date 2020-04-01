@@ -32,15 +32,16 @@ for lab in labels_df['label'].unique():
 for row in labels_df.values:
     id, label = row
     old_path = f'{input_dir}train/{id}.png'
-    new_path = f'{train_dir}{label}/{id}.png'
+    new_path = f'{train_dir}{label}/{str(id).zfill(7)}.png'
     shutil.copy(old_path, new_path)
     print(f'Image copied from {old_path} to {new_path}')
 
 
 # copy all test images to single label directory
 for file in os.listdir(f'{input_dir}test/'):
+    id = os.path.splitext(file)[0]
     old_path = f'{input_dir}test/{file}'
-    new_path = f'{test_class_dir}{file}'
+    new_path = f'{test_class_dir}{id.zfill(7)}'
     if os.path.isfile(old_path):
         shutil.copy(old_path, new_path)
         print(f'Image copied from {old_path} to {new_path}')
