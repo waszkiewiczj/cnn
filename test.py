@@ -11,9 +11,7 @@ def predict(network, testset):
     return predicted.numpy()
 
 
-def get_accuracy(net, testset):
-    labels = testset.targets
-    predicted = predict(net, testset)
-    correct = np.sum(labels == predicted)
-    total = len(testset)
+def get_accuracy(predicted, targets):
+    correct = np.sum(targets == predicted)
+    total = len(predicted)
     return correct / total * 100
