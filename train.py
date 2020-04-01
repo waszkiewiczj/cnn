@@ -44,7 +44,7 @@ def train_network(network, config, observer=observers.EmptyObserver()):
             loss = config.criterion(outputs, labels)
             loss.backward()
             optimizer.step()
-            observer.update(network, epoch, iteration)
+            observer.update(network, epoch, iteration, loss.item())
 
 
 
