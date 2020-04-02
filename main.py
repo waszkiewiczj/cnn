@@ -1,9 +1,10 @@
 from torch import nn
+import torch
 
 import observers
 import train
 from datasets import load_CIFAR10
-from networks import TestNet
+from networks import TestNet, TestGpuNet
 
 
 def main():
@@ -15,7 +16,7 @@ def main():
     criterion = nn.CrossEntropyLoss()
     seed = 1000
     observer = observers.DummyPrintObserver()
-    net = TestNet()
+    net = TestGpuNet()
 
     train_config = train.TrainConfig(trainset=trainset, batch_size=batch_size, epochs=epochs, lr=lr, momentum=momentum,
                                criterion=criterion, seed=seed)
