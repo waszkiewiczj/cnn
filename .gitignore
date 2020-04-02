@@ -1,5 +1,8 @@
 .idea
 
+# directory for submissions
+kaggle_submissions/
+
 # datasets
 cifar-dataset/
 
