@@ -5,6 +5,8 @@ import torch.cuda
 import torch.optim as optim
 import numpy as np
 import random
+
+import helpers
 import observers
 
 
@@ -35,7 +37,7 @@ class TrainConfig:
 
 
 def train_network(network, config, observer=observers.EmptyObserver()):
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    device = helpers.get_device()
     network.to(device)
     optimizer = optim.SGD(network.parameters(), lr=config.lr, momentum=config.momentum)
     for epoch in range(config.epochs):
@@ -50,7 +52,7 @@ def train_network(network, config, observer=observers.EmptyObserver()):
 
 
 def get_accuracy(network, testset):
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    device = helpers.get_device()
     network.to(device)
     test_loader = torch.utils.data.DataLoader(testset, batch_size=4, shuffle=False)
     correct = 0

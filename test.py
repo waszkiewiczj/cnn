@@ -2,9 +2,11 @@ import torch
 import torch.utils.data
 import numpy as np
 
+import helpers
+
 
 def predict(network, testset):
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    device = helpers.get_device()
     network.to(device)
     result_predicted = []
     testset_loader = torch.utils.data.DataLoader(testset, batch_size=50, shuffle=False)
