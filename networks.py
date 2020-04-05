@@ -28,7 +28,8 @@ class TestNet(nn.Module):
 
 class TestGpuNet(nn.Module):
     """
-    Network taken from PyTorch repository tutorials.
+    Network taken from PyTorch repository tutorials upgraded to be efficciently computed on GPU
+    (first convolution layer filter size to 500 features).
     See ref: https://github.com/pytorch/tutorials/blob/master/beginner_source/blitz/cifar10_tutorial.py
     """
     def __init__(self):
