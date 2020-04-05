@@ -5,6 +5,7 @@ import torch.cuda
 import torch.optim as optim
 import numpy as np
 import random
+import helpers
 import observers
 
 
@@ -35,28 +36,15 @@ class TrainConfig:
 
 
 def train_network(network, config, observer=observers.EmptyObserver()):
+    device = helpers.get_device()
+    network.to(device)
     optimizer = optim.SGD(network.parameters(), lr=config.lr, momentum=config.momentum)
     for epoch in range(config.epochs):
         for iteration, data in enumerate(config.trainset_loader, 0):
-            inputs, labels = data
+            inputs, labels = data[0].to(device), data[1].to(device)
             optimizer.zero_grad()
             outputs = network(inputs)
             loss = config.criterion(outputs, labels)
             loss.backward()
             optimizer.step()
             observer.update(network, epoch, iteration, loss.item())
-
-
-def get_accuracy(net, testset):
-    test_loader = torch.utils.data.DataLoader(testset, batch_size=4, shuffle=False)
-    correct = 0
-    total = 0
-    with torch.no_grad():
-        for data in test_loader:
-            images, labels = data
-            outputs = net(images)
-            _, predicted = torch.max(outputs.data, 1)
-            total += labels.size(0)
-            correct += (predicted == labels).sum().item()
-
-    return correct / total * 100

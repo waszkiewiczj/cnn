@@ -9,17 +9,17 @@ import kaggle
 
 def main():
     trainset, testset = datasets.cifar10.from_kaggle()
-    batch_size = 4
+    batch_size = 128
     epochs = 2
     lr = 0.001
     momentum = 0.9
     criterion = nn.CrossEntropyLoss()
     seed = 1000
     observer = observers.DummyPrintObserver()
-    net = networks.TestNet()
+    net = networks.TestGpuNet()
 
     train_config = train.TrainConfig(trainset=trainset, batch_size=batch_size, epochs=epochs, lr=lr, momentum=momentum,
-                               criterion=criterion, seed=seed)
+                                     criterion=criterion, seed=seed)
 
     train.train_network(network=net, config=train_config, observer=observer)
 
