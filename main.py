@@ -1,6 +1,6 @@
 from torch import nn
 import observers
-import train
+from trainer import train
 import test
 import datasets.cifar10
 import networks
