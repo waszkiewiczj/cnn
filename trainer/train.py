@@ -1,6 +1,6 @@
 import torch.optim as optim
 import helpers
-import observers
+import trainer.observers as observers
 
 
 def train_network(network, config, observer=observers.EmptyObserver()):

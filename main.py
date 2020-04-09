@@ -1,5 +1,4 @@
 from torch import nn
-import observers
 import trainer
 import tester
 import datasets.cifar10
@@ -15,7 +14,7 @@ def main():
     momentum = 0.9
     criterion = nn.CrossEntropyLoss()
     seed = 1000
-    observer = observers.DummyPrintObserver()
+    observer = trainer.observers.DummyPrintObserver()
     net = networks.TestGpuNet()
 
     train_config = trainer.TrainConfig(trainset=trainset, batch_size=batch_size, epochs=epochs, lr=lr, momentum=momentum,
