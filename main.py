@@ -1,7 +1,7 @@
 from torch import nn
 import observers
-from trainer import train
-import test
+import trainer
+import tester
 import datasets.cifar10
 import networks
 import kaggle
@@ -18,12 +18,12 @@ def main():
     observer = observers.DummyPrintObserver()
     net = networks.TestGpuNet()
 
-    train_config = train.TrainConfig(trainset=trainset, batch_size=batch_size, epochs=epochs, lr=lr, momentum=momentum,
+    train_config = trainer.TrainConfig(trainset=trainset, batch_size=batch_size, epochs=epochs, lr=lr, momentum=momentum,
                                      criterion=criterion, seed=seed)
 
-    train.train_network(network=net, config=train_config, observer=observer)
+    trainer.train_network(network=net, config=train_config, observer=observer)
 
-    predicted = test.predict(network=net, testset=testset)
+    predicted = tester.predict(network=net, test_set=testset)
     idx_to_class = kaggle.get_idx_to_class_dict(trainset)
     df = kaggle.create_submission_df(predicted=predicted, idx_to_class=idx_to_class)
     df.to_csv('./kaggle_submissions/first-try-sub.csv', index=False)
