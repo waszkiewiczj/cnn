@@ -30,34 +30,43 @@ class TestNet(nn.Module):
         return x
 
 
-class TestGpuNet(nn.Module):
-    """
-    Network taken from PyTorch repository tutorials upgraded to be efficciently computed on GPU
-    (first convolution layer filter size to 500 features).
-    See ref: https://github.com/pytorch/tutorials/blob/master/beginner_source/blitz/cifar10_tutorial.py
-    """
-
-    def __init__(self):
-        super(TestGpuNet, self).__init__()
-        self.conv1 = nn.Conv2d(3, 500, 5)
-        self.pool = nn.MaxPool2d(2, 2)
-        self.conv2 = nn.Conv2d(500, 16, 5)
-        self.fc1 = nn.Linear(16 * 5 * 5, 120)
-        self.fc2 = nn.Linear(120, 84)
-        self.fc3 = nn.Linear(84, classes)
-
-    def forward(self, x):
-        x = self.pool(F.relu(self.conv1(x)))
-        x = self.pool(F.relu(self.conv2(x)))
-        x = x.view(-1, 16 * 5 * 5)
-        x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        x = self.fc3(x)
-        return x
+def freeze_parameters(model):
+    for param in model.parameters():
+        param.requires_grad = False
 
 
-def ResNet():
-    model_ft = models.resnet18(pretrained=True)
-    num_ftrs = model_ft.fc.in_features
-    model_ft.fc = nn.Linear(num_ftrs, classes)
-    return model_ft
+def get_custom_model(custom_model, input_size):
+    if "linear" == custom_model:
+        return nn.Linear(input_size, classes)
+
+
+def build(transfer_model_name, custom_model_name, freez_transfer):
+    if transfer_model_name == "resnet":
+        model_tl = models.resnet18(pretrained=True)
+        if freez_transfer:
+            freeze_parameters(model_tl)
+
+        num_ftrs = model_tl.fc.in_features
+        custom_model = get_custom_model(custom_model_name, num_ftrs)
+        model_tl.fc = custom_model
+        return model_tl
+
+    elif transfer_model_name == "alexnet":
+        model_tl = models.alexnet(pretrained=True)
+        if freez_transfer:
+            freeze_parameters(model_tl)
+
+        num_ftrs = model_tl.classifier[6].in_features
+        custom_model = get_custom_model(custom_model_name, num_ftrs)
+        model_tl.classifier[6] = custom_model
+        return model_tl
+
+    elif transfer_model_name == "vgg":
+        model_tl = models.vgg19_bn(pretrained=True)
+        if freez_transfer:
+            freeze_parameters(model_tl)
+
+        num_ftrs = model_tl.classifier[6].in_features
+        custom_model = get_custom_model(custom_model_name, num_ftrs)
+        model_tl.classifier[6] = custom_model
+        return model_tl
