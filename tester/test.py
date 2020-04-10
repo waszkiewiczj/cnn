@@ -3,6 +3,7 @@ import trainer
 import helpers
 from tester.test_observer import TestObserver
 import os
+import tester.plots
 
 
 def get_accuracy(predicted, targets):
@@ -24,3 +25,5 @@ def save_test_results(test_name, results):
     test_dir_path = f'./test_results/{test_name}/'
     os.makedirs(test_dir_path, exist_ok=True)
     results.to_csv(f'{test_dir_path}results.csv', index=False)
+    tester.plots.create_accuracy_plot(results).savefig(f'{test_dir_path}accuracy.svg')
+    tester.plots.create_loss_plot(results).savefig(f'{test_dir_path}loss.svg')
