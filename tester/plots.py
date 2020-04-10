@@ -10,6 +10,7 @@ def create_accuracy_plot(results):
     ax.set_ylabel('Accuracy %')
     ax.set_yticks(np.r_[0:100:10])
     ax.set_xticks(results['epoch'])
+    ax.grid(True, axis='y')
     ax.errorbar(
         x=results['epoch'],
         y=results['mean_accuracy'] * 100,
@@ -24,6 +25,7 @@ def create_loss_plot(results):
     ax.set_xlabel('Epoch')
     ax.set_ylabel('Loss value')
     ax.set_xticks(results['epoch'])
+    ax.grid(True, axis='y')
     ax.errorbar(
         x=results['epoch'],
         y=results['mean_loss'],
