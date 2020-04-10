@@ -32,21 +32,24 @@ class TestNet(nn.Module):
 
 
 def freeze_parameters(model):
-    for param in model.parameters():
-        param.requires_grad = False
+    if model:
+        for param in model.parameters():
+            param.requires_grad = False
 
 
 def get_custom_model(custom_model, input_size):
     global classes
     if "linear" == custom_model:
         return nn.Linear(input_size, classes)
+    if "testnet" == custom_model:
+        return TestNet()
 
 
 def build(transfer_model_name, custom_model_name, freeze_transfer):
     model = None
-    set_last_layer = None
+    set_last_layer = lambda model, cm: exec("model = cm")
     num_ftrs = 0
-    input_size = 0
+    input_size = 32
 
     if transfer_model_name == "resnet":
         model = models.resnet18(pretrained=True)
@@ -71,5 +74,10 @@ def build(transfer_model_name, custom_model_name, freeze_transfer):
         freeze_parameters(model)
 
     custom_model = get_custom_model(custom_model_name, num_ftrs)
-    set_last_layer(model,custom_model)
-    return model,input_size
+
+    if model:
+        set_last_layer(model,custom_model)
+    else:
+        model = custom_model
+
+    return model, input_size
