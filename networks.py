@@ -47,7 +47,7 @@ def get_custom_model(custom_model, input_size):
 
 def build(transfer_model_name, custom_model_name, freeze_transfer):
     model = None
-    set_last_layer = lambda model, cm: exec("model = cm")
+    set_last_layer = None
     num_ftrs = 0
     input_size = 32
 
