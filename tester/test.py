@@ -16,10 +16,11 @@ def get_accuracy(predicted, targets):
 def perform_single_test(config):
     observer = TestObserver(freq=config.data_collect_freq)
     train_config = config.to_train_config()
-    for seed in config.seeds:
+    for i, seed in enumerate(config.seeds):
         helpers.set_seed(seed)
         network = copy.deepcopy(config.network)
         trainer.train_network(network, train_config, observer)
+        print(f'{i + 1}/{len(config.seeds)} test completed')
     return observer.get_results()
 
 
