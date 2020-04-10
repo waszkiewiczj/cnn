@@ -4,12 +4,12 @@ import numpy as np
 import helpers
 
 
-def predict(network, test_set_loader):
+def predict(network, set_loader):
     device = helpers.get_device()
     network.to(device)
     result_predicted = []
     with torch.no_grad():
-        for data in test_set_loader:
+        for data in set_loader:
             inputs = data[0].to(device)
             outputs = network(inputs)
             _, predicted = torch.max(outputs, 1)
