@@ -1,5 +1,21 @@
+import torch
+import torch.utils.data
 import numpy as np
 import pandas as pd
+import helpers
+
+
+def predict(network, set_loader):
+    device = helpers.get_device()
+    network.to(device)
+    result_predicted = []
+    with torch.no_grad():
+        for data in set_loader:
+            inputs = data[0].to(device)
+            outputs = network(inputs)
+            _, predicted = torch.max(outputs, 1)
+            result_predicted += predicted.tolist()
+    return np.array(result_predicted)
 
 
 def get_idx_to_class_dict(dataset):
