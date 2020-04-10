@@ -4,11 +4,10 @@ import numpy as np
 import helpers
 
 
-def predict(network, test_set):
+def predict(network, test_set_loader):
     device = helpers.get_device()
     network.to(device)
     result_predicted = []
-    test_set_loader = torch.utils.data.DataLoader(test_set, batch_size=50, shuffle=False)
     with torch.no_grad():
         for data in test_set_loader:
             inputs = data[0].to(device)

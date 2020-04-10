@@ -6,10 +6,15 @@ import random
 
 
 class TrainConfig:
-    def __init__(self, trainset, batch_size, epochs, lr, momentum, criterion, seed=None):
+    def __init__(self, train_set, validation_set, batch_size, epochs, lr, momentum, criterion, seed=None):
         self.__set_seed(seed)
-        self.trainset_loader = torch.utils.data.DataLoader(
-            trainset,
+        self.train_set_loader = torch.utils.data.DataLoader(
+            train_set,
+            batch_size=batch_size,
+            shuffle=True
+        )
+        self.validation_set_loader = torch.utils.data.DataLoader(
+            validation_set,
             batch_size=batch_size,
             shuffle=True
         )

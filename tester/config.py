@@ -2,6 +2,8 @@ import torch.nn as nn
 import numpy as np
 import json
 import networks
+import datasets
+from trainer import TrainConfig
 
 
 class TestConfig:
@@ -25,6 +27,7 @@ class TestConfig:
             network_name,
             split_frac,
             max_epochs,
+            batch_size,
             learning_rate,
             momentum,
             criterion_name,
@@ -40,8 +43,10 @@ class TestConfig:
         assert 0 < data_collect_freq, 'Data collection frequency must be positive'
         self.test_name = test_name
         self.network = networks.__dict__[network_name]()
-        self.split_frac = split_frac
+        data_set = datasets.cifar10.from_kaggle(train=True)
+        self.train_set, self.validation_set = datasets.split(data_set, frac=split_frac)
         self.max_epochs = max_epochs
+        self.batch_size = batch_size
         self.learning_rate = learning_rate
         self.momentum = momentum
         self.criterion = nn.__dict__[criterion_name]()
@@ -49,6 +54,17 @@ class TestConfig:
         np.random.seed(seed)
         self.seeds = np.random.randn(test_count)
         self.data_collect_freq = data_collect_freq
+
+    def to_train_config(self):
+        return TrainConfig(
+            train_set=self.train_set,
+            validation_set=self.validation_set,
+            batch_size=self.batch_size,
+            epochs=self.max_epochs,
+            lr=self.learning_rate,
+            momentum=self.momentum,
+            criterion=self.criterion
+        )
 
     @staticmethod
     def from_json(json_string):
