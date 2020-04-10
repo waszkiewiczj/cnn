@@ -14,7 +14,7 @@ def create_accuracy_plot(results):
     ax.errorbar(
         x=results['epoch'],
         y=results['mean_accuracy'] * 100,
-        yerr=results['var_accuracy']
+        yerr=results['std_accuracy']
     )
     return fig
 
@@ -29,6 +29,6 @@ def create_loss_plot(results):
     ax.errorbar(
         x=results['epoch'],
         y=results['mean_loss'],
-        yerr=results['var_loss']
+        yerr=results['std_loss']
     )
     return fig

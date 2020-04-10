@@ -26,5 +26,5 @@ class TestObserver(TrainingObserver):
         df = pd.DataFrame(self.data)
         grouped = df.groupby('epoch')
         means = grouped.mean().add_prefix('mean_')
-        vars = grouped.var().add_prefix('var_')
-        return means.join(vars).reset_index()
+        stds = grouped.std().add_prefix('std_')
+        return means.join(stds).reset_index()
