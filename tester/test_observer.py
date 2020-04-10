@@ -1,13 +1,20 @@
 from trainer.observers import ConstFreqObserver
-from trainer.predict import predict
+from trainer import get_validation_stats
 from tester.test import get_accuracy
 import pandas as pd
+import torch.utils.data
 
 
 class TestObserver(ConstFreqObserver):
-    def __init__(self, freq, validation_set):
+    def __init__(self, freq, validation_set, criterion):
         super(ConstFreqObserver, self).__init__(freq)
-        self.validation_set = validation_set
+        self.validation_set_loader = torch.utils.data.DataLoader(
+            validation_set,
+            batch_size=100,
+            shuffle=False
+        )
+        self.labels = validation_set.targer
+        self.criterion = criterion
         self.data = pd.DataFrame({
             'epoch': [],
             'accuracy': [],
@@ -15,12 +22,12 @@ class TestObserver(ConstFreqObserver):
         })
 
     def freq_update(self, network, epoch, iteration, loss):
-        predicted = predict(network, self.validation_set)
-        acc = get_accuracy(predicted, self.validation_set.target)
+        validation_loss, predicted = get_validation_stats(network, self.validation_set_loader, self.criterion)
+        validation_acc = get_accuracy(predicted, self.labels)
         self.data.append({
             'epoch': [epoch],
-            'accuracy': [acc],
-            'loss': [loss]
+            'accuracy': [validation_acc],
+            'loss': [validation_loss]
         })
 
     def get_results(self):
