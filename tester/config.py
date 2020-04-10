@@ -24,7 +24,9 @@ class TestConfig:
     def __init__(
             self,
             test_name,
+            transfer_name,
             network_name,
+            transfer_pretrained,
             split_frac,
             max_epochs,
             batch_size,
@@ -35,15 +37,15 @@ class TestConfig:
             seed,
             data_collect_freq
     ):
-        assert network_name in self.__get_supported_networks(), 'Network not supported'
+        # assert network_name in self.__get_supported_networks(), 'Network not supported'
         assert 0 < split_frac <= 1, 'Split frac not in (0, 1]'
         assert 0 < max_epochs, 'Max epochs must be positive'
         assert criterion_name in self.__get_supported_critetions(), 'Criterion not supported'
         assert 0 < test_count, 'Test number must be positive'
         assert 0 < data_collect_freq, 'Data collection frequency must be positive'
         self.test_name = test_name
-        self.network = networks.__dict__[network_name]()
-        data_set = datasets.cifar10.from_kaggle(train=True)
+        self.network, input_size = networks.build(transfer_name,network_name,transfer_pretrained)
+        data_set = datasets.cifar10.from_kaggle(train=True, input_size=input_size)
         self.train_set, self.validation_set = datasets.split(data_set, frac=split_frac)
         self.max_epochs = max_epochs
         self.batch_size = batch_size
