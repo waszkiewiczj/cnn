@@ -15,6 +15,8 @@ def set_seed(seed):
         """
     if seed is not None:
         torch.manual_seed(seed)
+        torch.cuda.manual_seed(seed)
+        torch.cuda.manual_seed_all(seed)
         np.random.seed(seed)  # Numpy module.
         random.seed(seed)  # Python random module.
         torch.manual_seed(seed)
