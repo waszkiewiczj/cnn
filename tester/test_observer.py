@@ -20,7 +20,7 @@ class TestObserver(TrainingObserver):
             self.data['epoch'] += [epoch]
             self.data['accuracy'] += [validation_accuracy]
             self.data['loss'] += [validation_loss]
-            print(F'Epoch {epoch} validation: accuracy - {validation_accuracy}, loss -{validation_loss}')
+            print(F'Epoch {epoch} validation: accuracy - {validation_accuracy}, loss - {validation_loss}')
 
     def get_results(self):
         df = pd.DataFrame(self.data)
