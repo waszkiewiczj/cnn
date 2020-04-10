@@ -11,8 +11,17 @@ class TestConfig:
     @staticmethod
     def __get_supported_networks():
         return {
-            'TestNet',
-            'TestGpuNet'
+            'testnet',
+            'linear'
+        }
+
+    @staticmethod
+    def __get_supported_transfers():
+        return {
+            'empty',
+            'resnet',
+            'alexnet',
+            'vgg'
         }
 
     @staticmethod
@@ -37,7 +46,8 @@ class TestConfig:
             seed,
             data_collect_freq
     ):
-        # assert network_name in self.__get_supported_networks(), 'Network not supported'
+        assert network_name in self.__get_supported_networks(), 'Network not supported'
+        assert transfer_name in self.__get_supported_transfers(), 'Transfer not supported'
         assert 0 < split_frac <= 1, 'Split frac not in (0, 1]'
         assert 0 < max_epochs, 'Max epochs must be positive'
         assert criterion_name in self.__get_supported_critetions(), 'Criterion not supported'
