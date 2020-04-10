@@ -4,6 +4,7 @@ import helpers
 from tester.test_observer import TestObserver
 import os
 import tester.plots
+import copy
 
 
 def get_accuracy(predicted, targets):
@@ -17,7 +18,8 @@ def perform_single_test(config):
     train_config = config.to_train_config()
     for seed in config.seeds:
         helpers.set_seed(seed)
-        trainer.train_network(config.network, train_config, observer)
+        network = copy.deepcopy(config.network)
+        trainer.train_network(network, train_config, observer)
     return observer.get_results()
 
 
