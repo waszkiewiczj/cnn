@@ -1,7 +1,12 @@
 .idea
 .vscode
+
+# directory for test results
+test_results/
+
 # directory for submissions
 kaggle_submissions/
+
 # datasets
 cifar-dataset/
 

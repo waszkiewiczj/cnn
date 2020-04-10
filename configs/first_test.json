@@ -1,0 +1,13 @@
+{
+  "test_name": "first_test",
+  "network_name": "TestNet",
+  "split_frac": 0.7,
+  "max_epochs": 20,
+  "batch_size": 100,
+  "learning_rate": 0.001,
+  "momentum": 0.9,
+  "criterion_name": "CrossEntropyLoss",
+  "test_count": 2,
+  "seed": 123,
+  "data_collect_freq": 1
+}
