@@ -9,13 +9,14 @@ def get_device():
 
 
 def set_seed(seed):
-        """
+    """
         Set seed for all torch func and methods.
         See ref: https://github.com/pytorch/pytorch/issues/7068
         """
+    if seed is not None:
         torch.manual_seed(seed)
         np.random.seed(seed)  # Numpy module.
         random.seed(seed)  # Python random module.
         torch.manual_seed(seed)
-        torch.backends.cudnn.benchmark = seed is None
-        torch.backends.cudnn.deterministic = seed is not None
+        torch.backends.cudnn.benchmark = False
+        torch.backends.cudnn.deterministic = True

@@ -1,7 +1,8 @@
 import numpy as np
 import trainer
+import helpers
 from tester.test_observer import TestObserver
-import matplotlib.pyplot as plt
+import os
 
 
 def get_accuracy(predicted, targets):
@@ -11,11 +12,15 @@ def get_accuracy(predicted, targets):
 
 
 def perform_single_test(config):
+    observer = TestObserver(freq=config.data_collect_freq)
     train_config = config.to_train_config()
-    observer = TestObserver(config.validation_set, config.data_collect_freq, config.criterion)
-    trainer.train_network(config.nerwork, train_config, observer)
+    for seed in config.seeds:
+        helpers.set_seed(seed)
+        trainer.train_network(config.network, train_config, observer)
     return observer.get_results()
 
 
 def save_test_results(test_name, results):
-    results.to_csv(f'{test_name}.csv', index=False)
+    test_dir_path = f'./test_results/{test_name}/'
+    os.makedirs(test_dir_path, exist_ok=True)
+    results.to_csv(f'{test_dir_path}results.csv', index=False)

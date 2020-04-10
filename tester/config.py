@@ -52,7 +52,7 @@ class TestConfig:
         self.criterion = nn.__dict__[criterion_name]()
         self.test_count = test_count
         np.random.seed(seed)
-        self.seeds = np.random.randn(test_count)
+        self.seeds = np.random.randint(1000000, size=test_count)
         self.data_collect_freq = data_collect_freq
 
     def to_train_config(self):

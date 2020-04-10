@@ -1,37 +1,30 @@
-from trainer.observers import ConstFreqObserver
-from trainer import get_validation_stats
-from tester.test import get_accuracy
+from trainer.observers import TrainingObserver
 import pandas as pd
-import torch.utils.data
 
 
-class TestObserver(ConstFreqObserver):
-    def __init__(self, freq, validation_set, criterion):
-        super(ConstFreqObserver, self).__init__(freq)
-        self.validation_set_loader = torch.utils.data.DataLoader(
-            validation_set,
-            batch_size=100,
-            shuffle=False
-        )
-        self.labels = validation_set.targer
-        self.criterion = criterion
-        self.data = pd.DataFrame({
+class TestObserver(TrainingObserver):
+    def __init__(self, freq):
+        self.freq = freq
+        self.data = {
             'epoch': [],
             'accuracy': [],
             'loss': []
-        })
+        }
 
-    def freq_update(self, network, epoch, iteration, loss):
-        validation_loss, predicted = get_validation_stats(network, self.validation_set_loader, self.criterion)
-        validation_acc = get_accuracy(predicted, self.labels)
-        self.data.append({
-            'epoch': [epoch],
-            'accuracy': [validation_acc],
-            'loss': [validation_loss]
-        })
+    def update(self, network, epoch, iteration, loss):
+        if iteration % 100 == 0:
+            print(f'epoch {epoch}, iteration {iteration}: loss - {loss}')
+
+    def validation_update(self, network, epoch, validation_loss, validation_accuracy):
+        if epoch % self.freq == 0:
+            self.data['epoch'] += [epoch]
+            self.data['accuracy'] += [validation_accuracy]
+            self.data['loss'] += [validation_loss]
+            print(F'Epoch {epoch} validation: accuracy - {validation_accuracy}, loss -{validation_loss}')
 
     def get_results(self):
-        grouped = self.data.groupby('epoch')
+        df = pd.DataFrame(self.data)
+        grouped = df.groupby('epoch')
         means = grouped.mean().add_prefix('mean_')
         vars = grouped.var().add_prefix('var_')
         return means.join(vars).reset_index()

@@ -18,7 +18,12 @@ def train_network(network, config, observer=observers.EmptyObserver()):
             loss.backward()
             optimizer.step()
             observer.update(network, epoch, iteration, loss.item())
-        validation_loss, _ = get_validation_stats(network, config.validation_set_loader, config.criterion)
+        validation_loss, validation_accuracy = get_validation_stats(
+            network=network,
+            validation_set_loader=config.validation_set_loader,
+            criterion=config.criterion
+        )
+        observer.validation_update(network, epoch, validation_loss, validation_accuracy)
         if validation_loss > last_lost:
             return
         last_lost = validation_loss
@@ -27,7 +32,8 @@ def train_network(network, config, observer=observers.EmptyObserver()):
 def get_validation_stats(network, validation_set_loader, criterion):
     device = helpers.get_device()
     network.to(device)
-    result_predicted = []
+    correct = 0
+    total = 0
     loss = 0
     with torch.no_grad():
         for data in validation_set_loader:
@@ -36,5 +42,6 @@ def get_validation_stats(network, validation_set_loader, criterion):
             _, predicted = torch.max(outputs, 1)
             loss_val = criterion(outputs, labels)
             loss += loss_val.item()
-            result_predicted += predicted.tolist()
-    return loss, predicted
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+    return loss, correct / total
