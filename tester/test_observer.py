@@ -14,14 +14,13 @@ class TestObserver(ConstFreqObserver):
             'loss': []
         })
 
-    def freq_update(self, network, epoch, iteration):
+    def freq_update(self, network, epoch, iteration, loss):
         predicted = predict(network, self.validation_set)
         acc = get_accuracy(predicted, self.validation_set.target)
-        loss = None
         self.data.append({
             'epoch': [epoch],
             'accuracy': [acc],
-            'loss': []
+            'loss': [loss]
         })
 
     def get_results(self):
