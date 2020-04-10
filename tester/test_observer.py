@@ -1,5 +1,5 @@
 from trainer.observers import ConstFreqObserver
-from tester.predict import predict
+from trainer.predict import predict
 from tester.test import get_accuracy
 import pandas as pd
 
