@@ -42,33 +42,29 @@ def get_custom_model(custom_model, input_size):
         return nn.Linear(input_size, classes)
 
 
-def build(transfer_model_name, custom_model_name, freez_transfer):
-    if transfer_model_name == "resnet":
-        model_tl = models.resnet18(pretrained=True)
-        if freez_transfer:
-            freeze_parameters(model_tl)
+def build(transfer_model_name, custom_model_name, freeze_transfer):
+    model = None
+    set_last_layer = None
+    num_ftrs = 0
 
-        num_ftrs = model_tl.fc.in_features
-        custom_model = get_custom_model(custom_model_name, num_ftrs)
-        model_tl.fc = custom_model
-        return model_tl
+    if transfer_model_name == "resnet":
+        model = models.resnet18(pretrained=True)
+        num_ftrs = model.fc.in_features
+        set_last_layer = lambda model, cm: exec("model.fc = cm")
 
     elif transfer_model_name == "alexnet":
-        model_tl = models.alexnet(pretrained=True)
-        if freez_transfer:
-            freeze_parameters(model_tl)
-
-        num_ftrs = model_tl.classifier[6].in_features
-        custom_model = get_custom_model(custom_model_name, num_ftrs)
-        model_tl.classifier[6] = custom_model
-        return model_tl
+        model = models.alexnet(pretrained=True)
+        num_ftrs = model.classifier[6].in_features
+        set_last_layer = lambda model, cm: exec("model.classifier[6] = cm")
 
     elif transfer_model_name == "vgg":
-        model_tl = models.vgg19_bn(pretrained=True)
-        if freez_transfer:
-            freeze_parameters(model_tl)
+        model = models.vgg19_bn(pretrained=True)
+        num_ftrs = model.classifier[6].in_features
+        set_last_layer = lambda model, cm: exec("model.classifier[6] = cm")
 
-        num_ftrs = model_tl.classifier[6].in_features
-        custom_model = get_custom_model(custom_model_name, num_ftrs)
-        model_tl.classifier[6] = custom_model
-        return model_tl
+    if freeze_transfer:
+        freeze_parameters(model)
+
+    custom_model = get_custom_model(custom_model_name, num_ftrs)
+    set_last_layer(model,custom_model)
+    return model
