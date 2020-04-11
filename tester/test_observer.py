@@ -22,6 +22,9 @@ class TestObserver(TrainingObserver):
             self.data['loss'] += [validation_loss]
             print(F'Epoch {epoch} validation: accuracy - {validation_accuracy}, loss -{validation_loss}')
 
+    def get_raw_results(self):
+        return pd.DataFrame(self.data)
+
     def get_results(self):
         df = pd.DataFrame(self.data)
         grouped = df.groupby('epoch')
