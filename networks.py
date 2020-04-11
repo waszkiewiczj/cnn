@@ -54,20 +54,19 @@ def build(transfer_model_name, custom_model_name, freeze_transfer):
     if transfer_model_name == "resnet":
         model = models.resnet18(pretrained=True)
         num_ftrs = model.fc.in_features
-        input_size=224
+        input_size = 224
         set_last_layer = lambda model, cm: exec("model.fc = cm")
-
 
     elif transfer_model_name == "alexnet":
         model = models.alexnet(pretrained=True)
         num_ftrs = model.classifier[6].in_features
-        input_size=224
+        input_size = 224
         set_last_layer = lambda model, cm: exec("model.classifier[6] = cm")
 
     elif transfer_model_name == "vgg":
         model = models.vgg19_bn(pretrained=True)
         num_ftrs = model.classifier[6].in_features
-        input_size=224
+        input_size = 224
         set_last_layer = lambda model, cm: exec("model.classifier[6] = cm")
 
     if freeze_transfer:
@@ -76,7 +75,7 @@ def build(transfer_model_name, custom_model_name, freeze_transfer):
     custom_model = get_custom_model(custom_model_name, num_ftrs)
 
     if model:
-        set_last_layer(model,custom_model)
+        set_last_layer(model, custom_model)
     else:
         model = custom_model
 

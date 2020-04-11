@@ -54,7 +54,7 @@ class TestConfig:
         assert 0 < test_count, 'Test number must be positive'
         assert 0 < data_collect_freq, 'Data collection frequency must be positive'
         self.test_name = test_name
-        self.network, input_size = networks.build(transfer_name,network_name,transfer_pretrained)
+        self.network, input_size = networks.build(transfer_name, network_name, transfer_pretrained)
         data_set = datasets.cifar10.from_kaggle(train=True, input_size=input_size)
         self.train_set, self.validation_set = datasets.split(data_set, frac=split_frac)
         self.max_epochs = max_epochs
