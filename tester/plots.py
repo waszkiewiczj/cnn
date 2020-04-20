@@ -12,7 +12,7 @@ def create_accuracy_plot(results):
     if len(results) >= 16:
         ax.xaxis.set_major_locator(plt.MaxNLocator(16))
     else:
-        ax.set_xticks(np.r[0:len(results)])
+        ax.set_xticks(np.r_[0:len(results)])
     ax.grid(True, axis='y')
     ax.errorbar(
         x=results['epoch'],
@@ -30,7 +30,7 @@ def create_loss_plot(results):
     if len(results) >= 16:
         ax.xaxis.set_major_locator(plt.MaxNLocator(16))
     else:
-        ax.set_xticks(np.r[0:len(results)])
+        ax.set_xticks(np.r_[0:len(results)])
     ax.grid(True, axis='y')
     ax.errorbar(
         x=results['epoch'],
