@@ -18,9 +18,10 @@ class TestResultsSaver:
         accuracy_plot_filepath = f"{self.test_dir_path}/accuracy.svg"
         loss_plot_filepath = f"{self.test_dir_path}/loss.avg"
         df.to_csv(raw_results_filepath, index=False)
-        self.__get_grouped_results(df).to_csv(results_filepath, index=False)
-        tester.plots.create_accuracy_plot(df).savefig(accuracy_plot_filepath)
-        tester.plots.create_loss_plot(df).savefig(loss_plot_filepath)
+        grouped_df = self.__get_grouped_results(df)
+        grouped_df.to_csv(results_filepath, index=False)
+        tester.plots.create_accuracy_plot(grouped_df).savefig(accuracy_plot_filepath)
+        tester.plots.create_loss_plot(grouped_df).savefig(loss_plot_filepath)
 
     @staticmethod
     def __get_grouped_results(df):
