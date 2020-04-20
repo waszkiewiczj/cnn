@@ -9,7 +9,7 @@ def create_accuracy_plot(results):
     ax.set_xlabel('Epoch')
     ax.set_ylabel('Accuracy %')
     ax.set_yticks(np.r_[0:100:10])
-    ax.xaxis.set_major_locator(plt.MaxNLocator(16))
+    ax.xaxis.set_major_locator(plt.MaxNLocator(min(len(results), 16)))
     ax.grid(True, axis='y')
     ax.errorbar(
         x=results['epoch'],
@@ -24,7 +24,7 @@ def create_loss_plot(results):
     ax = fig.add_subplot(111)
     ax.set_xlabel('Epoch')
     ax.set_ylabel('Loss value')
-    ax.xaxis.set_major_locator(plt.MaxNLocator(16))
+    ax.xaxis.set_major_locator(plt.MaxNLocator(min(len(results), 16)))
     ax.grid(True, axis='y')
     ax.errorbar(
         x=results['epoch'],
