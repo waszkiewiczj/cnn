@@ -2,8 +2,6 @@ import numpy as np
 import trainer
 import helpers
 from tester.test_observer import TestObserver
-import os
-import tester.plots
 import copy
 
 
