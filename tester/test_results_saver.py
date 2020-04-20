@@ -6,7 +6,7 @@ class TestResultsSaver:
     def __init__(self, test_name, output_dir_path):
         self.test_name = test_name
         self.test_dir_path = f"{output_dir_path}/{test_name}"
-        os.makedirs(output_dir_path, exist_ok=True)
+        os.makedirs(self.test_dir_path, exist_ok=True)
 
     def save_partial_results(self, test_it, df):
         partial_result_filepath = f"{self.test_dir_path}/raw_results_{test_it}.csv"
