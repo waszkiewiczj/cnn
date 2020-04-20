@@ -16,7 +16,7 @@ class TestResultsSaver:
         raw_results_filepath = f"{self.test_dir_path}/raw_results.csv"
         results_filepath = f"{self.test_dir_path}/results.csv"
         accuracy_plot_filepath = f"{self.test_dir_path}/accuracy.svg"
-        loss_plot_filepath = f"{self.test_dir_path}/loss.avg"
+        loss_plot_filepath = f"{self.test_dir_path}/loss.svg"
         df.to_csv(raw_results_filepath, index=False)
         grouped_df = self.__get_grouped_results(df)
         grouped_df.to_csv(results_filepath, index=False)
