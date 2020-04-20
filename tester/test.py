@@ -21,12 +21,13 @@ def perform_single_test(config):
         network = copy.deepcopy(config.network)
         trainer.train_network(network, train_config, observer)
         print(f'{i + 1}/{len(config.seeds)} test completed')
-    return observer.get_results()
+    return observer.get_results(), observer.get_raw_results()
 
 
-def save_test_results(test_name, results):
+def save_test_results(test_name, results, results_raw):
     test_dir_path = f'./test_results/{test_name}/'
     os.makedirs(test_dir_path, exist_ok=True)
     results.to_csv(f'{test_dir_path}results.csv', index=False)
+    results_raw.to_csv(f'{test_dir_path}results_raw.csv', index=False)
     tester.plots.create_accuracy_plot(results).savefig(f'{test_dir_path}accuracy.svg')
     tester.plots.create_loss_plot(results).savefig(f'{test_dir_path}loss.svg')
