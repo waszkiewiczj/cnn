@@ -1,0 +1,15 @@
+{
+    "test_name": "alexnet",
+    "transfer_name": "alexnet",
+    "network_name": "linear",
+    "transfer_pretrained": true,
+    "split_frac": 0.7,
+    "max_epochs": 50,
+    "batch_size": 100,
+    "learning_rate": 0.0005,
+    "momentum": 0.9,
+    "criterion_name": "CrossEntropyLoss",
+    "test_count": 10,
+    "seed": 123,
+    "data_collect_freq": 1
+  }

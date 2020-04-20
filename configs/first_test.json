@@ -1,6 +1,8 @@
 {
   "test_name": "first_test",
-  "network_name": "TestNet",
+  "transfer_name": "empty",
+  "network_name": "testnet",
+  "transfer_pretrained": false,
   "split_frac": 0.7,
   "max_epochs": 50,
   "batch_size": 100,
