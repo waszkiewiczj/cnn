@@ -19,4 +19,4 @@ def perform_single_test(config):
         network = copy.deepcopy(config.network)
         trainer.train_network(network, train_config, observer)
         print(f'{i + 1}/{len(config.seeds)} test completed')
-    return observer.get_results(), observer.get_raw_results()
+    return observer.get_results()

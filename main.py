@@ -6,7 +6,7 @@ def main(config_path):
     with open(config_path, 'r') as file:
         json_config = file.read()
         config = tester.TestConfig.from_json(json_config)
-    test_results, test_results_raw = tester.perform_single_test(config)
+    test_results = tester.perform_single_test(config)
 
 
 if __name__ == '__main__':
