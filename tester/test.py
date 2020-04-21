@@ -2,8 +2,7 @@ import numpy as np
 import trainer
 import helpers
 from tester.test_observer import TestObserver
-import os
-import tester.plots
+from tester.test_results_saver import TestResultsSaver
 import copy
 
 
@@ -16,18 +15,13 @@ def get_accuracy(predicted, targets):
 def perform_single_test(config):
     observer = TestObserver(freq=config.data_collect_freq)
     train_config = config.to_train_config()
+    saver = TestResultsSaver(config.test_name, 'test_results')
     for i, seed in enumerate(config.seeds):
         helpers.set_seed(seed)
         network = copy.deepcopy(config.network)
         trainer.train_network(network, train_config, observer)
         print(f'{i + 1}/{len(config.seeds)} test completed')
-    return observer.get_results(), observer.get_raw_results()
-
-
-def save_test_results(test_name, results, results_raw):
-    test_dir_path = f'./test_results/{test_name}/'
-    os.makedirs(test_dir_path, exist_ok=True)
-    results.to_csv(f'{test_dir_path}results.csv', index=False)
-    results_raw.to_csv(f'{test_dir_path}results_raw.csv', index=False)
-    tester.plots.create_accuracy_plot(results).savefig(f'{test_dir_path}accuracy.svg')
-    tester.plots.create_loss_plot(results).savefig(f'{test_dir_path}loss.svg')
+        saver.save_partial_results(i, observer.get_results())
+    results = observer.get_results()
+    saver.save_full_results(results)
+    return results
