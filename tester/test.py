@@ -28,7 +28,7 @@ def perform_test(config, save_to='test_results'):
         )
         all_results += [test_results]
         test_results.to_csv(f"{results_dir}/test{str(i).zfill(2)}_results.csv", index=False)
-        print(f'{i + 1}/{len(config.seeds)} test completed')
+        print(f'{i + 1}/{len(config.seeds)} test iterations completed')
     full_results = pd.concat(all_results)
     full_results.to_csv(f"{results_dir}/results.csv", index=False)
     grouped_results = group_results(full_results)
