@@ -64,7 +64,7 @@ def get_custom_model(custom_model, input_size):
         return nn.Linear(input_size, classes)
     if "testnet" == custom_model:
         return TestNet()
-    if "hidden100":
+    if "hidden100" == custom_model:
         return Hidden(input_size, [100], classes)
 
 
