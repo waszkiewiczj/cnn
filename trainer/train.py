@@ -8,7 +8,7 @@ def train_network(network, config, observer=observers.EmptyObserver()):
     device = helpers.get_device()
     network.to(device)
     optimizer = optim.SGD(network.parameters(), lr=config.lr, momentum=config.momentum)
-    last_lost = float('inf')
+    min_loss = float('inf')
     for epoch in range(config.epochs):
         for iteration, data in enumerate(config.train_set_loader, 0):
             inputs, labels = data[0].to(device), data[1].to(device)
@@ -24,9 +24,9 @@ def train_network(network, config, observer=observers.EmptyObserver()):
             criterion=config.criterion
         )
         observer.validation_update(network, epoch, validation_loss, validation_accuracy)
-        if validation_loss > last_lost:
+        min_loss = min(validation_loss, min_loss)
+        if validation_loss / min_loss > 1.2:
             return
-        last_lost = validation_loss
 
 
 def get_validation_stats(network, validation_set_loader, criterion):
