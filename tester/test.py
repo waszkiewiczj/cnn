@@ -1,9 +1,11 @@
 import numpy as np
+import pandas as pd
 import trainer
 import helpers
 from tester.test_observer import TestObserver
-from tester.test_results_saver import TestResultsSaver
+import os
 import copy
+import tester.plots
 
 
 def get_accuracy(predicted, targets):
@@ -12,19 +14,27 @@ def get_accuracy(predicted, targets):
     return correct / total * 100
 
 
-def perform_test(config):
-    observer = TestObserver(freq=config.data_collect_freq)
+def perform_test(config, save_to='test_results'):
+    results_dir = f"{save_to}/{config.test_name}"
+    os.makedirs(results_dir, exist_ok=True)
     train_config = config.to_train_config()
-    saver = TestResultsSaver(config.test_name, 'test_results')
+    all_results = []
     for i, seed in enumerate(config.seeds):
-        helpers.set_seed(seed)
-        network = copy.deepcopy(config.network)
-        trainer.train_network(network, train_config, observer)
+        test_results = perform_single_test(
+            network=copy.deepcopy(config.network),
+            train_config=train_config,
+            seed=seed,
+            data_collect_freq=config.data_collect_freq
+        )
+        all_results += [test_results]
+        test_results.to_csv(f"{results_dir}/test{str(i).zfill(2)}_results.csv", index=False)
         print(f'{i + 1}/{len(config.seeds)} test completed')
-        saver.save_partial_results(i, observer.get_results())
-    results = observer.get_results()
-    saver.save_full_results(results)
-    return results
+    full_results = pd.concat(all_results)
+    full_results.to_csv(f"{results_dir}/results.csv", index=False)
+    grouped_results = group_results(full_results)
+    grouped_results.to_csv(f"{results_dir}/grouped_results.csv", index=False)
+    tester.plots.create_accuracy_plot(grouped_results).savefig(f"{results_dir}/accuracy.png")
+    tester.plots.create_loss_plot(grouped_results).savefig(f"{results_dir}/loss.png")
 
 
 def perform_single_test(network, train_config, seed, data_collect_freq):
@@ -36,3 +46,10 @@ def perform_single_test(network, train_config, seed, data_collect_freq):
         observer=observer
     )
     return observer.get_results()
+
+
+def group_results(results):
+    grouped = results.groupby('epoch')
+    means = grouped.mean().add_prefix('mean_')
+    stds = grouped.std().add_prefix('std_')
+    return means.join(stds).reset_index()
