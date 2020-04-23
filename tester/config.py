@@ -12,7 +12,8 @@ class TestConfig:
     def __get_supported_networks():
         return {
             'testnet',
-            'linear'
+            'linear',
+            'hidden100'
         }
 
     @staticmethod
