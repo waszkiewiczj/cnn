@@ -1,5 +1,5 @@
 {
-    "test_name": "resnet_test",
+    "test_name": "resnet_hidden100_test",
     "transfer_name": "resnet",
     "network_name": "hidden100",
     "transfer_pretrained": true,
@@ -9,7 +9,7 @@
     "learning_rate": 0.0005,
     "momentum": 0.9,
     "criterion_name": "CrossEntropyLoss",
-    "test_count": 10,
+    "test_count": 5,
     "seed": 123,
     "data_collect_freq": 1
   }
