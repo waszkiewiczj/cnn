@@ -2,7 +2,7 @@
     "test_name": "resnet_nofreeze_test",
     "transfer_name": "resnet",
     "network_name": "linear",
-    "transfer_pretrained": false,
+    "transfer_freeze": false,
     "split_frac": 0.7,
     "max_epochs": 50,
     "batch_size": 100,
