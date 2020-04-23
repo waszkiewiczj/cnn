@@ -39,7 +39,7 @@ class Hidden(nn.Module):
             raise ValueError('List of hidden layers sizes cannot be empty')
         self.fc1 = nn.Linear(input_size, hidden_sizes[0])
         self.fch = [
-            nn.Linear(hidden_sizes[i - 1], hidden_sizes[1])
+            nn.Linear(hidden_sizes[i - 1], hidden_sizes[i])
             for i in range(1, len(hidden_sizes))
         ]
         self.fc2 = nn.Linear(hidden_sizes[-1], output_size)
