@@ -2,7 +2,7 @@
     "test_name": "vgg",
     "transfer_name": "vgg",
     "network_name": "linear",
-    "transfer_pretrained": true,
+    "transfer_freeze": true,
     "split_frac": 0.7,
     "max_epochs": 50,
     "batch_size": 100,
