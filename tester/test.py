@@ -12,7 +12,7 @@ def get_accuracy(predicted, targets):
     return correct / total * 100
 
 
-def perform_single_test(config):
+def perform_test(config):
     observer = TestObserver(freq=config.data_collect_freq)
     train_config = config.to_train_config()
     saver = TestResultsSaver(config.test_name, 'test_results')
