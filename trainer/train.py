@@ -2,6 +2,7 @@ import torch
 import torch.optim as optim
 import helpers
 import trainer.observers as observers
+import copy
 
 
 def train_network(network, config, observer=observers.EmptyObserver()):
@@ -9,6 +10,7 @@ def train_network(network, config, observer=observers.EmptyObserver()):
     network.to(device)
     optimizer = optim.SGD(network.parameters(), lr=config.lr, momentum=config.momentum)
     min_loss = float('inf')
+    min_loss_network = None
     for epoch in range(config.epochs):
         for iteration, data in enumerate(config.train_set_loader, 0):
             inputs, labels = data[0].to(device), data[1].to(device)
@@ -24,9 +26,12 @@ def train_network(network, config, observer=observers.EmptyObserver()):
             criterion=config.criterion
         )
         observer.validation_update(network, epoch, validation_loss, validation_accuracy)
-        min_loss = min(validation_loss, min_loss)
+        if validation_loss < min_loss:
+            min_loss = validation_loss
+            min_loss_network = copy.deepcopy(network)
         if validation_loss / min_loss > 1.2:
-            return
+            return min_loss_network
+    return min_loss_network
 
 
 def get_validation_stats(network, validation_set_loader, criterion):
