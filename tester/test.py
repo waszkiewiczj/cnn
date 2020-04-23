@@ -25,3 +25,14 @@ def perform_test(config):
     results = observer.get_results()
     saver.save_full_results(results)
     return results
+
+
+def perform_single_test(network, train_config, seed, data_collect_freq):
+    observer = TestObserver(freq=data_collect_freq)
+    helpers.set_seed(seed=seed)
+    trainer.train_network(
+        network=network,
+        config=train_config,
+        observer=observer
+    )
+    return observer.get_results()
