@@ -21,7 +21,8 @@ class TestConfig:
             'empty',
             'resnet',
             'alexnet',
-            'vgg'
+            'vgg',
+            'densenet'
         }
 
     @staticmethod

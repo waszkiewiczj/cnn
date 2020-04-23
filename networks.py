@@ -69,6 +69,12 @@ def build(transfer_model_name, custom_model_name, freeze_transfer):
         input_size = 224
         set_last_layer = lambda model, cm: exec("model.classifier[6] = cm")
 
+    elif transfer_model_name == "densenet":
+        model = models.densenet121(pretrained=True)
+        num_ftrs = model.classifier.in_features
+        input_size = 224
+        set_last_layer = lambda model, cm: exec("model.classifier = cm")
+
     if freeze_transfer:
         freeze_parameters(model)
 
