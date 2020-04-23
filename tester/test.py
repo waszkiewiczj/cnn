@@ -6,6 +6,7 @@ from tester.test_observer import TestObserver
 import os
 import copy
 import tester.plots
+import torch
 
 
 def get_accuracy(predicted, targets):
@@ -34,6 +35,7 @@ def perform_test(config, save_to='test_results'):
         if test_loss < min_loss:
             min_loss = test_loss
             best_network = test_network
+            torch.save(best_network.state_dict(), f"{results_dir}/test{str(i).zfill(2)}_model.pth")
         print(f'{i + 1}/{len(config.seeds)} test iterations completed')
     full_results = pd.concat(all_results)
     full_results.to_csv(f"{results_dir}/results.csv", index=False)
