@@ -44,7 +44,7 @@ class CustomResNet(nn.Module):
         self.layers = [
             self._make_layer(block, plane, layer, stride=2,
                     dilate=dilate)
-            for plane, layer, dilate in zip(plane[1:], layers[1:], replace_stride_with_dilation)
+            for plane, layer, dilate in zip(planes[1:], layers[1:], replace_stride_with_dilation)
         ]
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc = nn.Linear(planes[-1] * block.expansion, num_classes)
