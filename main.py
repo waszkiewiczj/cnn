@@ -27,13 +27,13 @@ def main(config_paths):
         network = tester.perform_test(config)
         print("Preparing submission...")
         sub_file = f'kaggle_submissions/{config.test_name}.csv'
+        kaggle_testset = datasets.cifar10.from_kaggle(train=False, input_size=config.input_size)
         predicted = kaggle.predict(
             network=network,
             set_loader=torch.utils.data.DataLoader(
                 dataset=kaggle_testset,
                 batch_size=100),
         )
-        kaggle_testset = datasets.cifar10.from_kaggle(train=False, input_size=config.input_size)
         submission_df = kaggle.create_submission_df(predicted, idx_to_class)
         submission_df.to_csv(sub_file, index=False)
         print(f'Submission saved to {sub_file}')
