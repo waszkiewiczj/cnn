@@ -6,7 +6,7 @@ import torch.utils.data
 
 
 def main(config_paths):
-    kaggle_testset = datasets.cifar10.from_kaggle(train=False)
+
     idx_to_class = {
         0: 'airplane',
         1: 'automobile',
@@ -33,6 +33,7 @@ def main(config_paths):
                 dataset=kaggle_testset,
                 batch_size=100),
         )
+        kaggle_testset = datasets.cifar10.from_kaggle(train=False, input_size=config.input_size)
         submission_df = kaggle.create_submission_df(predicted, idx_to_class)
         submission_df.to_csv(sub_file, index=False)
         print(f'Submission saved to {sub_file}')
