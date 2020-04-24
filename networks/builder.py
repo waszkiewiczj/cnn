@@ -1,4 +1,5 @@
 import torch.nn as nn
+import networks.custom_resnet as custom_resnet
 from torchvision import models
 from networks.hidden import Hidden
 from networks.testnet import TestNet
@@ -20,6 +21,8 @@ def get_custom_model(custom_model, input_size):
         return TestNet()
     if "hidden100" == custom_model:
         return Hidden(input_size, [100], classes)
+    if "short_resnet" == custom_model:
+        return custom_resnet.short_resnet()
 
 
 def build(transfer_model_name, custom_model_name, freeze_transfer):
