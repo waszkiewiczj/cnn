@@ -108,3 +108,7 @@ class CustomResNet(nn.Module):
 
     def forward(self, x):
         return self._forward_impl(x)
+
+
+def short_resnet():
+    return CustomResNet(layers=(2, 2), planes=(256, 512))
