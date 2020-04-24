@@ -6,7 +6,6 @@ import torch.utils.data
 
 
 def main(config_paths):
-
     idx_to_class = {
         0: 'airplane',
         1: 'automobile',
