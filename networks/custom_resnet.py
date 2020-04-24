@@ -3,31 +3,36 @@ import torch.nn as nn
 import torchvision.models.resnet as resnetm
 
 
-class CustomResNet18(nn.Module):
+class CustomResNet(nn.Module):
     """
-    ResNet18 customisation basing on PyToch ResNet implementation.
+    ResNet customisation basing on PyToch ResNet implementation.
     See ref: https://github.com/pytorch/vision/blob/master/torchvision/models/resnet.py
     """
 
-    def __init__(self, block=resnetm.BasicBlock, layers=(2, 2, 2, 2), num_classes=1000, zero_init_residual=False,
+    def __init__(self, block=resnetm.BasicBlock, layers=(2, 2, 2, 2), planes=(64, 128, 256, 512), num_classes=10, zero_init_residual=False,
                  groups=1, width_per_group=64, replace_stride_with_dilation=None,
                  norm_layer=None):
-        super(CustomResNet18, self).__init__()
-        if layers is None:
-            layers = [2, 2, 2, 2]
+        super(CustomResNet, self).__init__()
         if norm_layer is None:
             norm_layer = nn.BatchNorm2d
+        if layers is None:
+            raise ValueError("layers cannot be None")
+        if planes is None:
+            raise ValueError("planes cannot be None")
+        if len(planes) != len(layers):
+            raise ValueError("layers and planes should be equal length"
+                             "got {} layers and {} planes".format(len(layers), len(planes)))
         self._norm_layer = norm_layer
 
-        self.inplanes = 64
+        self.inplanes = planes[0]
         self.dilation = 1
         if replace_stride_with_dilation is None:
             # each element in the tuple indicates if we should replace
             # the 2x2 stride with a dilated convolution instead
-            replace_stride_with_dilation = [False, False, False]
-        if len(replace_stride_with_dilation) != 3:
+            replace_stride_with_dilation = [False] * (len(layers) - 1)
+        if len(replace_stride_with_dilation) != len(layers) - 1:
             raise ValueError("replace_stride_with_dilation should be None "
-                             "or a 3-element tuple, got {}".format(replace_stride_with_dilation))
+                             "or a {}-element tuple, got {}".format(len(layers) - 1, replace_stride_with_dilation))
         self.groups = groups
         self.base_width = width_per_group
         self.conv1 = nn.Conv2d(3, self.inplanes, kernel_size=7, stride=2, padding=3,
@@ -35,15 +40,14 @@ class CustomResNet18(nn.Module):
         self.bn1 = norm_layer(self.inplanes)
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
-        self.layer1 = self._make_layer(block, 64, layers[0])
-        self.layer2 = self._make_layer(block, 128, layers[1], stride=2,
-                                       dilate=replace_stride_with_dilation[0])
-        self.layer3 = self._make_layer(block, 256, layers[2], stride=2,
-                                       dilate=replace_stride_with_dilation[1])
-        self.layer4 = self._make_layer(block, 512, layers[3], stride=2,
-                                       dilate=replace_stride_with_dilation[2])
+        self.layer1 = self._make_layer(block, self.inplanes, layers[0])
+        self.layers = [
+            self._make_layer(block, plane, layer, stride=2,
+                    dilate=dilate)
+            for plane, layer, dilate in zip(plane[1:], layers[1:], replace_stride_with_dilation)
+        ]
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
-        self.fc = nn.Linear(512 * block.expansion, num_classes)
+        self.fc = nn.Linear(planes[-1] * block.expansion, num_classes)
 
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -93,9 +97,8 @@ class CustomResNet18(nn.Module):
         x = self.maxpool(x)
 
         x = self.layer1(x)
-        x = self.layer2(x)
-        x = self.layer3(x)
-        x = self.layer4(x)
+        for layer in self.layers:
+            x = layer(x)
 
         x = self.avgpool(x)
         x = torch.flatten(x, 1)
