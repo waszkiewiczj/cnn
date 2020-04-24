@@ -40,12 +40,13 @@ class CustomResNet(nn.Module):
         self.bn1 = norm_layer(self.inplanes)
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
-        self.layer1 = self._make_layer(block, self.inplanes, layers[0])
-        self.layers = [
-            self._make_layer(block, plane, layer, stride=2,
-                    dilate=dilate)
-            for plane, layer, dilate in zip(planes[1:], layers[1:], replace_stride_with_dilation)
-        ]
+        self.layer = self._make_layer(block, self.inplanes, layers[0])
+        
+        self.layers_count = len(layers)
+        for i, (plane, layer, dilate) in enumerate(zip(planes[1:], layers[1:], replace_stride_with_dilation)):
+            self.__setattr__(f'layer{i}', self._make_layer(block, plane, layer, stride=2,
+                    dilate=dilate))
+        
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc = nn.Linear(planes[-1] * block.expansion, num_classes)
 
@@ -96,9 +97,9 @@ class CustomResNet(nn.Module):
         x = self.relu(x)
         x = self.maxpool(x)
 
-        x = self.layer1(x)
-        for layer in self.layers:
-            x = layer(x)
+        x = self.layer(x)
+        for i in range(0, self.layers_count - 1):
+            x = self.__getattr__(f'layer{i}')(x)
 
         x = self.avgpool(x)
         x = torch.flatten(x, 1)
