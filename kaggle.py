@@ -15,6 +15,7 @@ def predict(network, set_loader):
             outputs = network(inputs)
             _, predicted = torch.max(outputs, 1)
             result_predicted += predicted.tolist()
+            print(f"{len(result_predicted)} records evaluated")
     return np.array(result_predicted)
 
 
