@@ -113,3 +113,10 @@ class CustomResNet(nn.Module):
 
 def short_resnet():
     return CustomResNet(layers=(2, 2), planes=(256, 512))
+
+
+def short_many_planes_resnet():
+    return CustomResNet(layers=(2,2), planes=(1024, 1024))
+
+def short_many_planes_many_layers_resnet():
+    return CustomResNet(layers=(10, 10), planes=(1024, 1024))
