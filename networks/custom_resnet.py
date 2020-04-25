@@ -90,8 +90,7 @@ class CustomResNet(nn.Module):
 
         return nn.Sequential(*layers)
 
-    def _forward_impl(self, x):
-        # See note [TorchScript super()]
+    def forward(self, x):
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu(x)
@@ -106,9 +105,6 @@ class CustomResNet(nn.Module):
         x = self.fc(x)
 
         return x
-
-    def forward(self, x):
-        return self._forward_impl(x)
 
 
 def short_resnet():
