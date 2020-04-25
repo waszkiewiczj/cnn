@@ -116,7 +116,12 @@ def short_resnet():
 
 
 def short_many_planes_resnet():
-    return CustomResNet(layers=(2,2), planes=(1024, 1024))
+    return CustomResNet(layers=(2, 2), planes=(1024, 1024))
+
 
 def short_many_planes_many_layers_resnet():
     return CustomResNet(layers=(10, 10), planes=(1024, 1024))
+
+
+def long_resnet():
+    return CustomResNet(layers=(2, 2, 2, 2, 2, 2), planes=(64, 128, 256, 512, 1024, 2048))

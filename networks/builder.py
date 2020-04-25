@@ -23,10 +23,12 @@ def get_custom_model(custom_model, input_size):
         return Hidden(input_size, [100], classes)
     if "short_resnet" == custom_model:
         return custom_resnet.short_resnet()
-    if "short_many_planes_resnet":
+    if "short_many_planes_resnet" == custom_model:
         return custom_resnet.short_many_planes_resnet()
-    if "short_many_planes_layers_resnet":
+    if "short_many_planes_layers_resnet" == custom_model:
         return custom_resnet.short_many_planes_many_layers_resnet()
+    if "long_resnet" == custom_model:
+        return custom_resnet.long_resnet()
 
 
 def build(transfer_model_name, custom_model_name, freeze_transfer):
