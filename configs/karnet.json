@@ -1,15 +1,15 @@
 {
-    "test_name": "resnet_test",
+    "test_name": "karnet_test",
     "transfer_name": "empty",
     "network_name": "karnet",
     "transfer_freeze": false,
     "split_frac": 0.7,
-    "max_epochs": 50,
+    "max_epochs": 300,
     "batch_size": 100,
     "learning_rate": 0.0005,
     "momentum": 0.9,
     "criterion_name": "CrossEntropyLoss",
-    "test_count": 10,
+    "test_count": 5,
     "seed": 123,
     "data_collect_freq": 1
   }
