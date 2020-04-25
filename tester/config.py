@@ -13,7 +13,11 @@ class TestConfig:
         return {
             'testnet',
             'linear',
-            'hidden100'
+            'hidden100',
+            'short_resnet',
+            'short_many_planes_resnet',
+            'short_many_planes_layers_resnet',
+            'long_resnet'
         }
 
     @staticmethod
