@@ -1,6 +1,7 @@
 import torch.nn as nn
 import torch.nn.functional as F
 from torchvision import models
+from karnet import KarNet
 
 classes = 10
 
@@ -66,6 +67,8 @@ def get_custom_model(custom_model, input_size):
         return TestNet()
     if "hidden100" == custom_model:
         return Hidden(input_size, [100], classes)
+    if "karnet" == custom_model:
+        return KarNet()
 
 
 def build(transfer_model_name, custom_model_name, freeze_transfer):
@@ -107,5 +110,8 @@ def build(transfer_model_name, custom_model_name, freeze_transfer):
         set_last_layer(model, custom_model)
     else:
         model = custom_model
+
+    if custom_model=='karnet':
+        input_size=224
 
     return model, input_size

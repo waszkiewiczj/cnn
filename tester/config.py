@@ -13,7 +13,8 @@ class TestConfig:
         return {
             'testnet',
             'linear',
-            'hidden100'
+            'hidden100',
+            'karnet'
         }
 
     @staticmethod
