@@ -19,7 +19,7 @@ def _short_forward_impl(self, x):
     return x
 
 
-def get_short_resnet(resnet, num_classes):
+def get_short_resnet(resnet, num_classes = 1000):
     short_resnet = copy.deepcopy(resnet)
     short_resnet._forward_impl = _short_forward_impl
     short_resnet.fc = nn.Linear(128, num_classes)

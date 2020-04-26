@@ -25,6 +25,7 @@ class TestConfig:
         return {
             'empty',
             'resnet',
+            'short_resnet',
             'alexnet',
             'vgg',
             'densenet'

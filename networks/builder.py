@@ -3,6 +3,7 @@ import networks.custom_resnet as custom_resnet
 from torchvision import models
 from networks.hidden import Hidden
 from networks.testnet import TestNet
+from networks.resnet_to_transfer import get_short_resnet
 
 classes = 10
 
@@ -39,6 +40,12 @@ def build(transfer_model_name, custom_model_name, freeze_transfer):
 
     if transfer_model_name == "resnet":
         model = models.resnet18(pretrained=True)
+        num_ftrs = model.fc.in_features
+        input_size = 224
+        set_last_layer = lambda model, cm: exec("model.fc = cm")
+
+    elif transfer_model_name == 'short_resnet':
+        model = get_short_resnet(models.resnet18(pretrained=True))
         num_ftrs = model.fc.in_features
         input_size = 224
         set_last_layer = lambda model, cm: exec("model.fc = cm")
