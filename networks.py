@@ -112,6 +112,6 @@ def build(transfer_model_name, custom_model_name, freeze_transfer):
         model = custom_model
 
     if custom_model=='karnet':
-        input_size=224
+        input_size=32
 
     return model, input_size

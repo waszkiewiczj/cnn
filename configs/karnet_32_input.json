@@ -1,5 +1,5 @@
 {
-    "test_name": "karnet_test",
+    "test_name": "karnet_32_input_test",
     "transfer_name": "empty",
     "network_name": "karnet",
     "transfer_freeze": false,
