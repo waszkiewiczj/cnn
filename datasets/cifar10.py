@@ -5,8 +5,8 @@ import torchvision.transforms as transforms
 def train_transform(input_size):
     return transforms.Compose(
         [transforms.RandomHorizontalFlip(),
-         transforms.RandomCrop(32, padding=4),
-         transforms.RandomRotation((-10, 10)),
+        #  transforms.RandomCrop(32, padding=4),
+        #  transforms.RandomRotation((-10, 10)),
          transforms.Resize(input_size),
          transforms.ToTensor(),
          transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))])

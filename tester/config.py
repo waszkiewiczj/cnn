@@ -14,6 +14,7 @@ class TestConfig:
             'testnet',
             'linear',
             'hidden100',
+            'karnet',
             'short_resnet',
             'short_many_planes_resnet',
             'short_many_planes_layers_resnet',
