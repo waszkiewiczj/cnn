@@ -14,7 +14,11 @@ class TestConfig:
             'testnet',
             'linear',
             'hidden100',
-            'karnet'
+            'karnet',
+            'short_resnet',
+            'short_many_planes_resnet',
+            'short_many_planes_layers_resnet',
+            'long_resnet'
         }
 
     @staticmethod
