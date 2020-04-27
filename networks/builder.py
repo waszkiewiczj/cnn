@@ -2,7 +2,7 @@ import torch.nn as nn
 import networks.custom_resnet as custom_resnet
 from torchvision import models
 
-from karnet import KarNet
+from networks.karnet import KarNet
 from networks.hidden import Hidden
 from networks.testnet import TestNet
 
@@ -75,8 +75,5 @@ def build(transfer_model_name, custom_model_name, freeze_transfer):
         set_last_layer(model, custom_model)
     else:
         model = custom_model
-
-    if custom_model=='karnet':
-        input_size=32
 
     return model, input_size

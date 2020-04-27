@@ -47,7 +47,7 @@ class VoteBlock(nn.Module):
 
     def forward(self, x):
         x = self.avgpool(x)
-        x = x.view(x.size(0), -1)
+        x = torch.flatten(x,1)
         x = self.fc1(x)
         x = self.relu(x)
         x = self.dropout(x)
@@ -70,7 +70,7 @@ class KarNet(nn.Module):
         
 
     def forward(self, x):
-        x, linear = self.first([x, None])
-        x, linear = self.blocks([x, linear])
+        x, votes = self.first([x, None])
+        x, votes = self.blocks([x, votes])
 
-        return linear
+        return votes
